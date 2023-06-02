@@ -4557,7 +4557,7 @@ class Systemctl:
             status = preset.get_preset(unit)
             if status:
                 return status
-        return None
+        return "enabled"
     def preset_modules(self, *modules):
         """ [UNIT]... -- set 'enabled' when in *.preset
         """
