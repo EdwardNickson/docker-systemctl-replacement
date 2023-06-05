@@ -1617,7 +1617,7 @@ class Systemctl:
         conf._root = self._root
         return conf
     def get_unit_conf(self, module): # -> conf (conf | default-conf)
-        """ accept that a unit does not exist 
+        """ accept that a unit does not exist
             and return a unit conf that says 'not-loaded' """
         conf = self.load_unit_conf(module)
         if conf is not None:
@@ -1681,7 +1681,7 @@ class Systemctl:
                 yield item
     def match_units(self, modules = None, suffix=".service"): # -> [ units,.. ]
         """ Helper for about any command with multiple units which can
-            actually be glob patterns on their respective unit name. 
+            actually be glob patterns on their respective unit name.
             It returns all modules if no modules pattern were given.
             Also a single string as one module pattern may be given. """
         found = []
@@ -1731,7 +1731,7 @@ class Systemctl:
         return [(unit, result[unit] + " " + active[unit] + " " + substate[unit], description[unit]) for unit in sorted(result)]
     def list_units_modules(self, *modules): # -> [ (unit,loaded,description) ]
         """ [PATTERN]... -- List loaded units.
-        If one or more PATTERNs are specified, only units matching one of 
+        If one or more PATTERNs are specified, only units matching one of
         them are shown. NOTE: This is the default command."""
         hint = "To show all installed unit files use 'systemctl list-unit-files'."
         result = self.list_service_units(*modules)
@@ -2889,7 +2889,7 @@ class Systemctl:
         return self.start_units(units, init) and found_all
     def start_units(self, units, init = None):
         """ fails if any unit does not start
-        /// SPECIAL: may run the init-loop and 
+        /// SPECIAL: may run the init-loop and
             stop the named units afterwards """
         self.wait_system()
         done = True
@@ -4830,7 +4830,7 @@ class Systemctl:
             return True
         return False
     def is_enabled_modules(self, *modules):
-        """ [UNIT]... -- check if these units are enabled 
+        """ [UNIT]... -- check if these units are enabled
         returns True if any of them is enabled."""
         found_all = True
         units = []
@@ -5500,7 +5500,7 @@ class Systemctl:
                 return True # ignore
         return False
     def default_services_modules(self, *modules):
-        """ show the default services 
+        """ show the default services
             This is used internally to know the list of service to be started in the 'get-default'
             target runlevel when the container is started through default initialisation. It will
             ignore a number of services - use '--all' to show a longer list of services and
@@ -5689,7 +5689,7 @@ class Systemctl:
                     units.append(unit)
         return units
     def get_target_conf(self, module): # -> conf (conf | default-conf)
-        """ accept that a unit does not exist 
+        """ accept that a unit does not exist
             and return a unit conf that says 'not-loaded' """
         conf = self.load_unit_conf(module)
         if conf is not None:
@@ -5715,7 +5715,7 @@ class Systemctl:
             This will go through the enabled services in the default 'multi-user.target'.
             However some services are ignored as being known to be installation garbage
             from unintended services. Use '--all' so start all of the installed services
-            and with '--all --force' even those services that are otherwise wrong. 
+            and with '--all --force' even those services that are otherwise wrong.
             /// SPECIAL: with --now or --init the init-loop is run and afterwards
                 a system_halt is performed with the enabled services to be stopped."""
         self.sysinit_status(SubState = "initializing")
@@ -5829,15 +5829,15 @@ class Systemctl:
         return msg
     def init_modules(self, *modules):
         """ [UNIT*] -- init loop: '--init default' or '--init start UNIT*'
-        The systemctl init service will start the enabled 'default' services, 
+        The systemctl init service will start the enabled 'default' services,
         and then wait for any  zombies to be reaped. When a SIGINT is received
         then a clean shutdown of the enabled services is ensured. A Control-C in
         in interactive mode will also run 'stop' on all the enabled services. //
         When a UNIT name is given then only that one is started instead of the
-        services in the 'default.target'. Using 'init UNIT' is better than 
-        '--init start UNIT' because the UNIT is also stopped cleanly even when 
+        services in the 'default.target'. Using 'init UNIT' is better than
+        '--init start UNIT' because the UNIT is also stopped cleanly even when
         it was never enabled in the system.
-        /// SPECIAL: when using --now then only the init-loop is started, 
+        /// SPECIAL: when using --now then only the init-loop is started,
         with the reap-zombies function and waiting for an interrupt.
         (and no unit is started/stoppped wether given or not).
         """
@@ -5934,8 +5934,8 @@ class Systemctl:
         """ This function will retart failed units.
         /
         NOTE that with standard settings the LimitBurst implementation has no effect. If
-        the InitLoopSleep is ticking at the Default of 5sec and the LimitBurst Default 
-        is 5x within a Default 10secs time frame then within those 10sec only 2 loop 
+        the InitLoopSleep is ticking at the Default of 5sec and the LimitBurst Default
+        is 5x within a Default 10secs time frame then within those 10sec only 2 loop
         rounds have come here checking for possible restarts. You can directly shorten
         the interval ('-c InitLoopSleep=1') or have it indirectly shorter from the
         service descriptor's RestartSec ("RestartSec=2s").
@@ -6051,7 +6051,7 @@ class Systemctl:
     def init_loop_until_stop(self, units):
         """ this is the init-loop - it checks for any zombies to be reaped and
             waits for an interrupt. When a SIGTERM /SIGINT /Control-C signal
-            is received then the signal name is returned. Any other signal will 
+            is received then the signal name is returned. Any other signal will
             just raise an Exception like one would normally expect. As a special
             the 'systemctl halt' emits SIGQUIT which puts it into no_more_procs mode."""
         signal.signal(signal.SIGQUIT, lambda signum, frame: ignore_signals_and_raise_keyboard_interrupt("SIGQUIT"))
