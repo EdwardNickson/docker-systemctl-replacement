@@ -91,6 +91,7 @@ _root = ""
 _unit_type = None
 _unit_state = None
 _unit_property = None
+_value = False
 _what_kind = ""
 _show_all = False
 _user_mode = False
@@ -1320,6 +1321,7 @@ class Systemctl:
         self._unit_property = _unit_property
         self._unit_state = _unit_state
         self._unit_type = _unit_type
+        self._value = _value
         # some common constants that may be changed
         self._systemd_version = SystemCompatibilityVersion
         self._journal_log_folder = _journal_log_folder
@@ -5421,7 +5423,10 @@ class Systemctl:
                 else:
                     if not value and not self._show_all:
                         continue
-                result += ["%s=%s" % (var, value)]
+                if self._value:
+                    result += [value]
+                else:
+                    result += ["%s=%s" % (var, value)]
         return result
     def show_unit_items(self, unit):
         """ [UNIT]... -- show properties of a unit.
@@ -6669,6 +6674,8 @@ if __name__ == "__main__":
                   help="Which signal to send (ignored)")
     _o.add_option("--now", action="store_true", default=_now,
                   help="Start or stop unit in addition to enabling or disabling it")
+    _o.add_option("--value", action="store_true", default=_value,
+                  help="Show value only")
     _o.add_option("-q", "--quiet", action="store_true", default=_quiet,
                   help="Suppress output")
     _o.add_option("--no-block", action="store_true", default=False,
@@ -6732,6 +6739,7 @@ if __name__ == "__main__":
     _unit_state = opt.state
     _unit_type = opt.unit_type
     _unit_property = opt.unit_property
+    _value = opt.value
     _what_kind = opt.what_kind
     # being PID 1 (or 0) in a container will imply --init
     _pid = os.getpid()
